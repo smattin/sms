@@ -8,8 +8,7 @@ from enum import Enum, unique
 
 import options
 
-phone_len = 10
-max_msg_len = 100
+config = options.default
 
 class Status(Enum):
     """
@@ -28,9 +27,9 @@ class Message:
         #chars = string.printable
         chars = ascii_letters+digits # not including whitespace initially
         self.text = text if 0<len(text) else ''.join(random.choice(chars)
-                for i in range(random.randint(1,max_msg_len)))
+                for i in range(random.randint(1,config['max_msg_len'])))
         self.phone = phone if 0<len(phone) else ''.join(random.choice(digits)
-                for i in range(phone_len))
+                for i in range(config['phone_len']))
         self.status = status
 
     def formatted(self):
@@ -90,9 +89,9 @@ FAILED,9782268322,DgOVY6OQG5Kjj
         #self.assertTrue(isinstance(phone,str))
         self.assertTrue(isinstance(text,str))
 
-        self.assertEqual(len(phone),phone_len)
+        self.assertEqual(len(phone),config['phone_len'])
         self.assertTrue(0<len(text))
-        self.assertTrue(len(text)<=max_msg_len)
+        self.assertTrue(len(text)<=config['max_msg_len'])
 
     def test1(self):
 
@@ -132,8 +131,6 @@ FAILED,9782268322,DgOVY6OQG5Kjj
         self.assertGreater(m.delivery,now)
 
 if __name__ == '__main__':
-    global config
-    global log
     config = options.get(sys.argv)
     log = config['log']
     if config['test']:

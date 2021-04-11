@@ -13,6 +13,8 @@ default={ 'messages': 1000
         , 'update_rate': 1
         , 'mean_processing_time': 5
         , 'failure_rate': 200
+        , 'phone_len': 10
+        , 'max_msg_len': 100
        } # TODO: get from ENV or file
 
 def get(argv):

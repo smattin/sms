@@ -1,5 +1,6 @@
 #!/bin/env -S python
 #
+import sys
 from string import digits,ascii_letters
 from time import sleep
 
@@ -7,14 +8,6 @@ import unittest
 
 from message import Message
 import options
-
-phone_len = 10
-max_msg_len = 100
-
-# globals for monitoring
-sent = 0
-failed = 0
-processing_time = 0; # double?
 
 def producer(messages=1000):
     """

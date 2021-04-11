@@ -6,29 +6,8 @@ from string import digits,ascii_letters
 import random
 import unittest
 
+import options
 from message import Message
-
-# TODO: extract this log config logic
-log = logging.getLogger()
-log.setLevel(logging.INFO)
-fh = logging.StreamHandler()
-fh_formatter = logging.Formatter('%(asctime)s %(levelname)s %(lineno)d:%(filename)s(%(process)d) - %(message)s')
-fh.setFormatter(fh_formatter)
-log.addHandler(fh)
-
-phone_len = 10
-max_msg_len = 100
-
-# globals for monitoring
-sent = 0
-failed = 0
-total_time = 0.0; # double?
-
-default={ 'messages': 1000
-        , 'update_rate': 1
-        , 'mean_total_time': 5
-        , 'failure_rate': 250 # per messages
-       } # TODO: get from ENV or file
 
 def summarize( config ):
     """
@@ -61,15 +40,9 @@ if __name__ == '__main__':
     #     mean_total_time for sender
     #     failure_rate for sender
     #     
-    argc = len(sys.argv)
-    if ('-d' in sys.argv):
-        log.setLevel(logging.DEBUG)
-        argc = argc -1
 
-    config = default
-    log.debug(sys.argv)
-    if 1 < argc:
-        config['update_rate'] = int(sys.argv[len(sys.argv)-1])
+    config = options.get(sys.argv)
+    log = config['log']
 
     log.debug(config)
     summarize(config)
