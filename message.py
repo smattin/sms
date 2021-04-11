@@ -30,7 +30,7 @@ class Message:
         self.text = text if 0<len(text) else ''.join(random.choice(chars)
                 for i in range(random.randint(1,max_msg_len)))
         self.phone = phone if 0<len(phone) else ''.join(random.choice(digits)
-                for i in range(10))
+                for i in range(phone_len))
         self.status = status
 
     def formatted(self):
