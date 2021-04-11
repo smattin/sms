@@ -17,7 +17,7 @@ SMS simulator for emergency alert system
         A progress monitor that displays the following and
     updates it every N seconds (configurable):
 
-        One instance each for the  producer and the progress monitor will be started
+    One instance each for the  producer and the progress monitor will be started
     while a variable number of senders can be started with
     different mean processing time and error rate settings.
 
