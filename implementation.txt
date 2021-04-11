@@ -1,0 +1,25 @@
+Current implementation only supports a single sender and has a separate summarize step.
+The summarize step output can be sent to a file, which simpifies the monitor, so it just outputs the last line for each update.
+
+All this avoids using Python asyncio, which I need to read up on.
+
+Configuration defaults are given in options.py
+Probably these should be read from a file or ENV.
+
+Calculation of processing times for sending messages is done
+on simulated send, messages are ordered by processing time, and sleeps are only done if ending delivery time not reached.
+
+Not sure if this is what was intended in spec. see ReadMe.md
+
+Run something like:
+
+$ ./producer.py | ./sender.py --failure_rate 50 | ./summarize.py --failure_rate 50 > summary.txt &
+[1] 15305
+
+$ UPDATE_RATE=3 ./monitor.sh
+sent 236 messages, 14 failed, 1.12 secs/msg
+sent 563 messages, 35 failed, 2.77 secs/msg
+sent 867 messages, 55 failed, 4.3 secs/msg
+sent 1000 messages, 62 failed, 4.97 secs/msg
+[1]+  Done                    ./producer.py | ./sender.py --failure_rate 50 | ./summarize.py --failure_rate 50 > summary.txt
+
