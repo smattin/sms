@@ -7,9 +7,10 @@ from time import sleep
 import unittest
 
 from message import Message
+import sender
 import options
 
-def producer(messages=1000):
+def producer(config=options.default):
     """
     generate a configurable number of messages (default 1000)
     to random phone number. Each message contains up to 100 random characters.
@@ -18,16 +19,23 @@ def producer(messages=1000):
 
     outputs messages as lines to stdout formatted like: phone <tab> text
     """
+    messages = config['messages']
+    senders = config['senders']
     while (0 < messages):
         # do we really care about phone number?
         # get message
 
         m = Message()
-        m.put() # allow file descriptor?
+        if 1 < senders:
+            sendfile = sender.input(messages%senders)
+            log.debug('sending to {}'.format(sendfile))
+            m.put(sendfile)
+        else:
+            m.put()
         # put in queue like SQS FIFO https://aws.amazon.com/sqs/
         #     $0.50 per million API requests
         #     msg.put(m)
-        messages = messages - 1
+        messages -= 1
 
 if __name__ == '__main__':
     # get configuration values
@@ -41,5 +49,5 @@ if __name__ == '__main__':
     config = options.get(sys.argv)
     log = config['log']
     log.debug(config)
-    producer(config['messages'])
+    producer(config)
 

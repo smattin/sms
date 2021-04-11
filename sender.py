@@ -18,6 +18,19 @@ class PrioritizedItem:
     priority: int # millisecs until delivery time
     item: Any=field(compare=False)
 
+def input(sender):
+    return "sender"+str(sender)+".txt"
+
+messageInput = sys.stdin
+def getMessage():
+    global messageInput
+    message = None
+    if 1 < config['senders'] and messageInput == sys.stdin:
+        my = config['number']
+        log.debug('opening message input {}'.format(input(my)))
+        messageInput = open(input(my), 'r')
+    return Message().get(messageInput)
+
 def sender( config=options.default):
     """
     picks up messages from the producer and
@@ -29,9 +42,9 @@ def sender( config=options.default):
     """
     log = config['log']
     sending = PriorityQueue(config['messages'])
-    message = Message().get()
+
+    message = getMessage()
     while not(message is None):
-        # get message from queue, if any?
 
         log.debug('get message {}'.format(message.formatted()))
         secs = config['mean_processing_time'];
@@ -52,8 +65,11 @@ def sender( config=options.default):
         ms = int((message.delivery - time())*1000)
         sending.put(PrioritizedItem(ms,message))
 
-        message = Message().get()
+        log.debug('sender {} queue size {} messages'.format(config['number'],sending.qsize()))
+        message = getMessage()
 
+    messageInput.close();
+    log.debug('sender {} queue size {} messages'.format(config['number'],sending.qsize()))
     while not(sending.empty()):
         message = sending.get().item
         remaining = message.delivery - time()
@@ -72,6 +88,7 @@ if __name__ == '__main__':
     #     
     config = options.get(sys.argv)
     log = config['log']
+    log.debug(config)
 
     sender(config)
 

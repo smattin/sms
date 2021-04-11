@@ -18,7 +18,7 @@ def summarize( config ):
     failed = 0
     total_time = 0.0
     while True:
-        message = Message().get()
+        message = Message().get() # TODO: Get from multiple sender output
         if message is None:
             break
         else:

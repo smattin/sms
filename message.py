@@ -48,14 +48,23 @@ class Message:
 
     def put(self,output=sys.stdout):
         msg = self.formatted()
+        assert(isinstance(msg, str))
         if output==sys.stdout:
             print(msg)
         else:
-            with open(output, 'w') as f:
+            with open(output, 'a') as f:
                 print(msg,file=f)
 
     def get(self,input=sys.stdin): # get from input in same format as put
-        line = input.readline()
+        if input==sys.stdin:
+            line = input.readline()
+        else:
+            #with open(input, 'r') as f: # FIXME: can't always get first
+            line = input.readline()
+
+        if line == "":
+            return None
+
         values = line.rstrip().split(Message.sep)
 
         if 2 < len(values):

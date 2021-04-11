@@ -10,6 +10,7 @@ fh.setFormatter(fh_formatter)
 log.addHandler(fh)
 
 default={ 'messages': 1000
+        , 'senders': 1
         , 'update_rate': 1
         , 'mean_processing_time': 5
         , 'failure_rate': 200
@@ -29,15 +30,17 @@ def get(argv):
                        +' --mean_processing_time (secs)' \
                        +' --messages (count)' \
                        +' --update_rate (secs)' \
+                       +' --senders (count)' \
                        +' --test' \
                        +' --debug'
     debug = False
     test = False
 
     try:
-        opts, args = getopt.getopt(argv[1:],"hdtfmp:",
-                ["help","debug","test",
-                 "failure_rate=","messages=","mean_processing_time","update_rate="])
+        opts, args = getopt.getopt(argv[1:],"hdtfmnps:",
+        ["help","debug","test",
+        "s=","senders=","n=","number=",
+        "failure_rate=","m=","messages=","-p=","mean_processing_time=","update_rate="])
     except getopt.GetoptError:
         print(help)
         sys.exit(2)
@@ -60,9 +63,15 @@ def get(argv):
     
         if opt in ['-m','-msgs', '--messages']:
             config['messages'] = int(arg)
-    
+
+        if opt in ['-n','-num', '--number']:
+            config['number'] = int(arg)
+
         if opt in ['-p','--mean_processing_time']:
             config['mean_processing_time'] = int(arg)
+    
+        if opt in ['-s','-send', '--senders']:
+            config['senders'] = int(arg)
     
         if opt in ['-u','-update', '--update_rate']:
             config['update_rate'] = int(arg)
