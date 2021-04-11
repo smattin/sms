@@ -3,6 +3,8 @@ The summarize step output can be sent to a file, which simpifies the monitor, so
 
 All this avoids using Python asyncio, which I need to read up on.
 
+The simulator branch has unfinished work to allow launching multiple senders, where producer will divide messages into one file for each sender. Multiple output files from each sender would all be read by the summarizer.
+
 Configuration defaults are given in options.py
 Probably these should be read from a file or ENV.
 
